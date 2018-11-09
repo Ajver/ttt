@@ -47,7 +47,7 @@ public class MainClass extends jslEngine {
 
             }
             public void onPress() {
-                for(int )
+                
             }
             public void render(Graphics g) {
                 if(hover) {
