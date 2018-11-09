@@ -3,17 +3,19 @@ package MainFiles;
 import jslEngine.jslObject;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Field extends jslObject {
 
-    private Color[] colors = new Color[2];
-    private int colorNr = 0;
+    private MainClass main;
 
-    public Field(float x, float y, float w, float h) {
+    private MainClass.Type type = MainClass.Type.empty;
+    private BufferedImage img = null;
+
+    public Field(float x, float y, float w, float h, MainClass main) {
         super(x, y, w, h);
 
-        colors[0] = new Color(226, 223, 204);
-        colors[1] = new Color(214, 210, 190);
+        this.main = main;
     }
 
     public void update(float et) {
@@ -21,18 +23,30 @@ public class Field extends jslObject {
     }
 
     public void render(Graphics g) {
-        g.setColor(colors[colorNr]);
-        g.fillRect((int)x, (int)y, (int)w, (int)h);
+        if(hover || main.status != MainClass.Status.game) {
+            g.setColor(new Color(214, 210, 190));
+        }else {
+            g.setColor(new Color(226, 223, 204));
+        }
+        g.fillRect((int)getX(), (int)getY(), (int)w, (int)h);
 
         g.setColor(new Color(94, 93, 89));
-        g.drawRect((int)x, (int)y, (int)w, (int)h);
+        g.drawRect((int)getX(), (int)getY(), (int)w, (int)h);
+
+        if(img != null) {
+            g.drawImage(img, (int)x, (int)y, null);
+        }
     }
 
-    public void onEnter() {
-        colorNr = 1;
+    public void onPress() {
+        if(main.status == MainClass.Status.game) {
+            if (type == MainClass.Type.empty) {
+                type = main.round;
+                img = type == MainClass.Type.x ? main.imgX : main.imgO;
+                main.nextRound();
+            }
+        }
     }
 
-    public void onLeave() {
-        colorNr = 0;
-    }
+    public MainClass.Type getType() { return type; }
 }
