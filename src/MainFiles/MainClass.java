@@ -36,18 +36,17 @@ public class MainClass extends jslEngine {
     private MainClass() {
         start("Tic Tac Toe", fieldSize*6, fieldSize*4);
 
-        resetBoard();
-
-        jsl.translateX(fieldSize*0.5f);
-        jsl.translateY(fieldSize*0.5f);
-
-        jsl.add(new jslObject(WW()-250, 240, 150, 30) {
-            private String title = "Again!";
-            public void onCreate() {
-
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<3; j++) {
+                board[i][j] = new Field(j*fieldSize, i*fieldSize, fieldSize, fieldSize, this);
+                jsl.add(board[i][j]);
             }
+        }
+
+        jslObject btn = new jslObject(WW()-250, 240, 150, 30) {
+            private String title = "Again!";
             public void onPress() {
-                
+                resetBoard();
             }
             public void render(Graphics g) {
                 if(hover) {
@@ -61,7 +60,14 @@ public class MainClass extends jslEngine {
                 g.setColor(new Color(72, 72, 72));
                 g.drawString(title, (int)getX()+45, (int)(getY()+getH()-8));
             }
-        });
+        };
+
+        jsl.add(btn);
+
+        resetBoard();
+
+        jsl.translateX(fieldSize*0.5f);
+        jsl.translateY(fieldSize*0.5f);
 
         try {
             imgX = ImageIO.read(new File("res/x.png"));
@@ -72,12 +78,13 @@ public class MainClass extends jslEngine {
     }
 
     public void resetBoard() {
-        jsl.removeAllObjects();
+        roundNr = 0;
+        status = Status.game;
+        round = Type.x;
 
         for(int i=0; i<3; i++) {
-            for(int j=0; j<3; j++) {
-                board[i][j] = new Field(j*fieldSize, i*fieldSize, fieldSize, fieldSize, this);
-                jsl.add(board[i][j]);
+            for (int j = 0; j < 3; j++) {
+                board[i][j].reset();
             }
         }
     }
@@ -95,16 +102,12 @@ public class MainClass extends jslEngine {
             g.drawImage((round == Type.x ? imgX : imgO), WW() - 180, 110, null);
         }else {
             if (status == Status.draw) {
-                g.drawString("Draw!", WW() - 180, 260);
+                g.drawString("Draw!", WW() - 180, 100);
             } else {
                 g.drawImage((status == Status.winX ? imgX : imgO), WW() - 180, 110, null);
                 g.drawString("Wins!", WW() - 170, 100);
             }
         }
-    }
-
-    protected void onPress(jslObject o) {
-
     }
 
     protected void onKeyPressed() {

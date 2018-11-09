@@ -48,5 +48,10 @@ public class Field extends jslObject {
         }
     }
 
+    public void reset() {
+        type = MainClass.Type.empty;
+        img = null;
+    }
+
     public MainClass.Type getType() { return type; }
 }
