@@ -8,10 +8,22 @@ import java.awt.Color;
 
 public class MainClass extends jslEngine {
 
+    private Field[][] board = new Field[3][3];
+
     private MainClass() {
-        start("Tic Tac Toe", 600, 400);
+        start("Tic Tac Toe", 480, 384);
 
+        int fieldSize = 96;
 
+        for(int i=0; i<3; i++) {
+            for(int j=0; j<3; j++) {
+                board[i][j] = new Field(j*fieldSize, i*fieldSize, fieldSize, fieldSize);
+                jsl.add(board[i][j]);
+            }
+        }
+
+        jsl.translateX(fieldSize*0.5f);
+        jsl.translateY(fieldSize*0.5f);
     }
 
     protected void update(float et) {
