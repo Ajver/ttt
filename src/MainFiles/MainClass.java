@@ -22,8 +22,8 @@ public class MainClass extends jslEngine {
             }
         }
 
-        jsl.translateX(fieldSize*0.5f);
-        jsl.translateY(fieldSize*0.5f);
+        jsl.translateX(200);
+        jsl.translateY(fieldSize*1.5f);
     }
 
     protected void update(float et) {
