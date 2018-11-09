@@ -77,7 +77,7 @@ public class MainClass extends jslEngine {
         }
     }
 
-    public void resetBoard() {
+    private void resetBoard() {
         roundNr = 0;
         status = Status.game;
         round = Type.x;
